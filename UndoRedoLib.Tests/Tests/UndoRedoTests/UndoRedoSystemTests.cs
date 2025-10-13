@@ -1,4 +1,7 @@
-﻿using UndoRedoLib.UndoRedo;
+﻿// Copyright (c) 2025 Sarah Frémann.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+using UndoRedoLib.UndoRedo;
 
 namespace UndoRedoLib.Tests.Tests.UndoRedoTests
 {
