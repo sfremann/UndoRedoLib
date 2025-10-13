@@ -7,10 +7,7 @@ Struct with two delegates: one for the *do* action, the other for the *undo* act
 
 Usage:
 ```
-UndoableAction action = new(
-    () => { /* Do */ },
-    () => { /* Undo */ }
-)
+UndoableAction action = new(() => { /* Do */ }, () => { /* Undo */ })
 {
     Description = "description" // Optional
 };
@@ -26,10 +23,7 @@ Usage:
 ```
 UndoRedoSystem history = new(100 /* Optional max actions in history, default is 100 */);
 
-UndoableAction action = new(
-    () => { /* Do */ },
-    () => { /* Undo */ }
-)
+UndoableAction action = new(() => { /* Do */ }, () => { /* Undo */ })
 {
     Description = "description" // Optional
 };

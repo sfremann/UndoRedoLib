@@ -1,4 +1,4 @@
-namespace UndoRedoLib
+namespace UndoRedoLib.UndoRedo
 {
     /// <summary>
     /// Base struct for undoable action

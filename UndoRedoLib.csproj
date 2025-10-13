@@ -5,6 +5,12 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
+
+    <PackageId>sfremann.UndoRedoLib</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Sarah Frémann</Authors>
+    <PackageDescription>WPF class library with basic undo-redo functionality</PackageDescription>
+    <RepositoryUrl>https://github.com/sfremann/UndoRedoLib</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
-namespace UndoRedoLib
+namespace UndoRedoLib.UndoRedo
 {
     /// <summary>
     /// Base view model with undo-redo functionality
