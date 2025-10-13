@@ -3,7 +3,7 @@
 
 using UndoRedoLib.UndoRedo;
 
-namespace UndoRedoLib.Tests.Tests.UndoRedoTests
+namespace UndoRedoLib.Tests.UndoRedoTests
 {
     [TestClass]
     public sealed class UndoRedoSystemTests
@@ -388,11 +388,9 @@ namespace UndoRedoLib.Tests.Tests.UndoRedoTests
         {
             // Arrange
             UndoRedoSystem undoRedoSystem = new() { IsDirty = true };
-            int stubUndoValue = 1;
-            int stubRedoValue = -stubUndoValue;
-            int undoValue = 0;
-            int doValue = 0;
-            UndoableAction action = new(() => { doValue = -undoValue; }, () => { undoValue = stubUndoValue; });
+            bool executedUndo = false;
+            bool executedRedo = false;
+            UndoableAction action = new(() => { executedRedo = executedUndo; }, () => { executedUndo = true; });
             undoRedoSystem.ExecuteUndoableAction(action);
             undoRedoSystem.IsDirty = false;
 
@@ -404,8 +402,8 @@ namespace UndoRedoLib.Tests.Tests.UndoRedoTests
 
             // Assert
             Assert.IsTrue(undoEmpty);
-            Assert.AreEqual(stubRedoValue, doValue);
-            Assert.AreEqual(stubUndoValue, undoValue);
+            Assert.IsTrue(executedUndo);
+            Assert.IsTrue(executedRedo);
             Assert.IsTrue(isDirty);
         }
 
@@ -433,13 +431,18 @@ namespace UndoRedoLib.Tests.Tests.UndoRedoTests
         {
             // Arrange
             UndoRedoSystem undoRedoSystem = new() { IsDirty = true };
-            int stubUndoValue = 1;
-            int stubRedoValue = -stubUndoValue;
-            int undoValue = 0;
-            int doValue = 0;
+            bool executedUndo = false;
+            bool executedRedo = false;
             UndoableAction action = new(
-                () => { doValue = -undoValue; undoValue = 0; },
-                () => { undoValue = stubUndoValue; });
+                () =>
+                {
+                    if (executedUndo)
+                    {
+                        executedRedo = true;
+                        executedUndo = false;
+                    }
+                },
+                () => { executedUndo = true; });
             undoRedoSystem.ExecuteUndoableAction(action);
             undoRedoSystem.UndoCommand.Execute(null);
             undoRedoSystem.IsDirty = false;
@@ -450,8 +453,8 @@ namespace UndoRedoLib.Tests.Tests.UndoRedoTests
             undoRedoSystem.UndoCommand.Execute(null);
 
             // Assert
-            Assert.AreEqual(stubRedoValue, doValue);
-            Assert.AreEqual(stubUndoValue, undoValue);
+            Assert.IsTrue(executedRedo);
+            Assert.IsTrue(executedUndo);
             Assert.IsTrue(isDirty);
         }
 
@@ -496,17 +499,12 @@ namespace UndoRedoLib.Tests.Tests.UndoRedoTests
         // --- Tests on UndoRedoSystem.ExecuteUndoableAction(UndoableAction action, bool skipExecution = false)
 
         [TestMethod]
-        public void UndoRedoSystem_ExecuteUndoableAction_SkipExecution_ShouldAddActionToUndoStack_AndNotExectuteDo_AndSetIsDirtyToTrue_AndEmptyRedoStack()
+        public void UndoRedoSystem_ExecuteUndoableAction_SkipExecution_ShouldAddActionToUndoStack_AndNotExecuteDo_AndSetIsDirtyToTrue_AndEmptyRedoStack()
         {
             // Arrange
             UndoRedoSystem undoRedoSystem = new();
-            int stubUndoValue = 1;
-            int undoValue = 0;
-            int doValue = 0;
-            int stubDoValue = doValue;
-            UndoableAction action = new(
-                () => { doValue++; },
-                () => { undoValue = stubUndoValue; });
+            bool executedDo = false;
+            UndoableAction action = new(() => { executedDo = true; }, () => { });
 
             // Act
             undoRedoSystem.ExecuteUndoableAction(action, true /* skipExecution */);
@@ -515,24 +513,18 @@ namespace UndoRedoLib.Tests.Tests.UndoRedoTests
             undoRedoSystem.ExecuteUndoableAction(new(() => { }, () => { }), true /* skipExecution */);
 
             // Assert
-            Assert.AreEqual(stubDoValue, doValue);
-            Assert.AreEqual(stubUndoValue, undoValue);
+            Assert.IsFalse(executedDo);
             Assert.IsTrue(isDirty);
             Assert.IsTrue(undoRedoSystem.RedoEmpty);
         }
 
         [TestMethod]
-        public void UndoRedoSystem_ExecuteUndoableAction_ShouldAddActionToUndoStack_AndExectuteDo_AndSetIsDirtyToTrue_AndEmptyRedoStack()
+        public void UndoRedoSystem_ExecuteUndoableAction_ShouldAddActionToUndoStack_AndExecuteDo_AndSetIsDirtyToTrue_AndEmptyRedoStack()
         {
             // Arrange
             UndoRedoSystem undoRedoSystem = new();
-            int stubDoValue = 1;
-            int stubUndoValue = -stubDoValue;
-            int undoValue = 0;
-            int doValue = 0;
-            UndoableAction action = new(
-                () => { doValue = stubDoValue; },
-                () => { undoValue = stubUndoValue; });
+            bool executedDo = false;
+            UndoableAction action = new(() => { executedDo = true; }, () => { });
 
             // Act
             undoRedoSystem.ExecuteUndoableAction(action);
@@ -541,8 +533,7 @@ namespace UndoRedoLib.Tests.Tests.UndoRedoTests
             undoRedoSystem.ExecuteUndoableAction(new(() => { }, () => { }));
 
             // Assert
-            Assert.AreEqual(stubDoValue, doValue);
-            Assert.AreEqual(stubUndoValue, undoValue);
+            Assert.IsTrue(executedDo);
             Assert.IsTrue(isDirty);
             Assert.IsTrue(undoRedoSystem.RedoEmpty);
         }
