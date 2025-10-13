@@ -1,4 +1,3 @@
-
 namespace UndoRedoLib
 {
     /// <summary>
