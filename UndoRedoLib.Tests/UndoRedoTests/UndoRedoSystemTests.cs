@@ -504,7 +504,8 @@ namespace UndoRedoLib.Tests.UndoRedoTests
             // Arrange
             UndoRedoSystem undoRedoSystem = new();
             bool executedDo = false;
-            UndoableAction action = new(() => { executedDo = true; }, () => { });
+            bool executedUndo = false;
+            UndoableAction action = new(() => { executedDo = true; }, () => { executedUndo = true; });
 
             // Act
             undoRedoSystem.ExecuteUndoableAction(action, true /* skipExecution */);
@@ -514,6 +515,7 @@ namespace UndoRedoLib.Tests.UndoRedoTests
 
             // Assert
             Assert.IsFalse(executedDo);
+            Assert.IsTrue(executedUndo);
             Assert.IsTrue(isDirty);
             Assert.IsTrue(undoRedoSystem.RedoEmpty);
         }
@@ -524,7 +526,8 @@ namespace UndoRedoLib.Tests.UndoRedoTests
             // Arrange
             UndoRedoSystem undoRedoSystem = new();
             bool executedDo = false;
-            UndoableAction action = new(() => { executedDo = true; }, () => { });
+            bool executedUndo = false;
+            UndoableAction action = new(() => { executedDo = true; }, () => { executedUndo = true; });
 
             // Act
             undoRedoSystem.ExecuteUndoableAction(action);
@@ -534,6 +537,7 @@ namespace UndoRedoLib.Tests.UndoRedoTests
 
             // Assert
             Assert.IsTrue(executedDo);
+            Assert.IsTrue(executedUndo);
             Assert.IsTrue(isDirty);
             Assert.IsTrue(undoRedoSystem.RedoEmpty);
         }
