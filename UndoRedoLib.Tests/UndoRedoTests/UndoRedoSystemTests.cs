@@ -11,7 +11,7 @@ namespace UndoRedoLib.Tests.UndoRedoTests
         // --- Tests on UndoRedoSystem stacks
 
         [TestMethod]
-        public void UndoRedoSystem_ChangeUndoStack_ShouldUpdateUndoDescription_AndUpdateUndoEmpty()
+        public void UndoRedoSystem_ChangingUndoStack_ShouldUpdateUndoDescription_AndUpdateUndoEmpty()
         {
             // Arrange
             UndoRedoSystem undoRedoSystem = new();
@@ -30,16 +30,18 @@ namespace UndoRedoLib.Tests.UndoRedoTests
             undoRedoSystem.UndoCommand.Execute(null);
 
             // Assert
+            // --- UndoEmpty true when undo stack empty, else false
             Assert.IsTrue(undoRedoSystem.UndoEmpty);
             Assert.IsFalse(undoEmpty1);
             Assert.IsFalse(undoEmpty2);
+            // --- UndoDescription is description of next action to undo, or default value when empty
             Assert.AreEqual(stubUndoEmptyDesc, undoRedoSystem.UndoDescription);
             Assert.AreEqual(action1.Description, undoDescription1);
             Assert.AreEqual(action2.Description, undoDescription2);
         }
 
         [TestMethod]
-        public void UndoRedoSystem_ChangeRedoStack_ShouldUpdateRedoDescription_AndUpdateRedoEmpty()
+        public void UndoRedoSystem_ChangingRedoStack_ShouldUpdateRedoDescription_AndUpdateRedoEmpty()
         {
             // Arrange
             UndoRedoSystem undoRedoSystem = new();
@@ -59,9 +61,11 @@ namespace UndoRedoLib.Tests.UndoRedoTests
             undoRedoSystem.ExecuteUndoableAction(action1);
 
             // Assert
+            // --- RedoEmpty true when redo stack empty, else false
             Assert.IsTrue(undoRedoSystem.RedoEmpty);
             Assert.IsFalse(redoEmpty1);
             Assert.IsFalse(redoEmpty2);
+            // --- RedoDescription is description of next action to redo, or default value when empty
             Assert.AreEqual(stubRedoEmptyDesc, undoRedoSystem.RedoDescription);
             Assert.AreEqual(action1.Description, redoDescription1);
             Assert.AreEqual(action2.Description, redoDescription2);
@@ -73,7 +77,7 @@ namespace UndoRedoLib.Tests.UndoRedoTests
         [DataRow(1, 0)]
         [DataRow(2, 1)]
         [DataRow(3, 2)]
-        public void UndoRedoSystem_AddActionToUndoStack_ShouldEnsureMaxCapacity(int nbActions, int maxActions)
+        public void UndoRedoSystem_AddingActionToUndoStack_ShouldEnsureMaxCapacity(int nbActions, int maxActions)
         {
             // Arrange
             UndoRedoSystem undoRedoSystem = new(maxActions);
