@@ -1,3 +1,5 @@
+[![.NET Core Desktop](https://github.com/sfremann/UndoRedoLib/actions/workflows/test-and-package.yml/badge.svg)](https://github.com/sfremann/UndoRedoLib/actions/workflows/test-and-package.yml)
+
 # UndoRedoLib
 WPF class library with basic undo-redo functionality
 
