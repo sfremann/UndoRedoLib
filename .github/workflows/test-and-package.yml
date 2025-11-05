@@ -1,3 +1,5 @@
+# Run unit tests and publish package to GitHub Packages
+
 name: .NET Core Desktop
 
 on:
